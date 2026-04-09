@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Estate Command Center V2 Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .active-tab { border-left: 4px solid #3b82f6; background: #eff6ff; color: #1e40af; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+    <header class="lg:hidden bg-blue-900 text-white p-4 flex justify-between items-center">
+        <h1 class="font-bold">V2 PRO CENTER</h1>
+        <button onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+    </header>
+
+    <div class="flex min-h-screen">
+        <nav id="sidebar" class="hidden lg:block w-64 bg-white border-r border-gray-200 flex-shrink-0">
+            <div class="p-6">
+                <h1 class="text-xl font-bold text-blue-900">Command Center</h1>
+                <p class="text-xs text-gray-500">Real Estate Box 2026</p>
+            </div>
+            <ul class="space-y-1">
+                <li><button onclick="showTab('social')" class="tab-btn w-full text-left px-6 py-3 hover:bg-gray-100 transition active-tab"><i class="fas fa-share-alt mr-3"></i> Social Media Gen</button></li>
+                <li><button onclick="showTab('objection')" class="tab-btn w-full text-left px-6 py-3 hover:bg-gray-100 transition"><i class="fas fa-shield-alt mr-3"></i> Objection Bot</button></li>
+                <li><button onclick="showTab('leads')" class="tab-btn w-full text-left px-6 py-3 hover:bg-gray-100 transition"><i class="fas fa-users mr-3"></i> Lead Tracker</button></li>
+                <li><button onclick="showTab('settings')" class="tab-btn w-full text-left px-6 py-3 hover:bg-gray-100 transition"><i class="fas fa-cog mr-3"></i> Settings</button></li>
+            </ul>
+        </nav>
+
+        <main class="flex-1 p-4 lg:p-10">
+            
+            <section id="social-tab" class="content-section">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="text-2xl font-bold mb-6">Social Media Strategy Generator</h2>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">What's the property focus or topic?</label>
+                        <textarea id="topicInput" rows="3" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="e.g. Luxury 3-bed in downtown, or 'Why now is the time to sell'"></textarea>
+                        <button onclick="generatePosts()" id="genBtn" class="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition w-full">
+                            Generate 7 Days of Posts
+                        </button>
+                    </div>
+                    <div id="outputArea" class="mt-8 space-y-4">
+                        </div>
+                </div>
+            </section>
+
+            <section id="settings-tab" class="content-section hidden">
+                <div class="max-w-xl">
+                    <h2 class="text-2xl font-bold mb-6">Setup & Security</h2>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Gemini API Key</label>
+                        <input type="password" id="apiKey" class="w-full border rounded-lg p-3 mb-4" placeholder="Paste your key here...">
+                        <p class="text-xs text-gray-500">Your key is stored only in your browser. It is never uploaded to GitHub.</p>
+                        <button onclick="saveSettings()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded">Save Locally</button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        // Tab switching logic
+        function showTab(tabName) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.add('hidden'));
+            document.getElementById(tabName + '-tab').classList.remove('hidden');
+            
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active-tab'));
+            event.currentTarget.classList.add('active-tab');
+        }
+
+        function saveSettings() {
+            const key = document.getElementById('apiKey').value;
+            localStorage.setItem('gemini_key', key);
+            alert('Settings saved!');
+        }
+
+        // The logic to talk to Gemini
+        async function generatePosts() {
+            const key = localStorage.getItem('gemini_key');
+            const topic = document.getElementById('topicInput').value;
+            const btn = document.getElementById('genBtn');
+
+            if (!key) { alert('Please enter your API Key in Settings first!'); return; }
+            if (!topic) { alert('Please enter a topic!'); return; }
+
+            btn.disabled = true;
+            btn.innerText = "Consulting Gemini...";
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${key}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `Act as a luxury real estate marketing expert. Create 7 social media posts (caption and image idea) for a week based on this topic: ${topic}` }] }]
+                    })
+                });
+
+                const data = await response.json();
+                const content = data.candidates[0].content.parts[0].text;
+                
+                document.getElementById('outputArea').innerHTML = `
+                    <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 whitespace-pre-wrap">
+                        ${content}
+                    </div>
+                `;
+            } catch (error) {
+                console.error(error);
+                alert('Error connecting to Gemini. Check your key.');
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Generate 7 Days of Posts";
+            }
+        }
+    </script>
+</body>
+</html>
