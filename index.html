@@ -9,64 +9,65 @@
     <style>
         body { background-color: #7c73e6; } 
         .glass-card { background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
-        .nav-btn { background: #6366f1; color: white; border: 1px solid rgba(255,255,255,0.4); border-radius: 10px; font-weight: bold; transition: 0.2s; padding: 10px 20px; }
+        .nav-btn { background: #6366f1; color: white; border: 1px solid rgba(255,255,255,0.4); border-radius: 10px; font-weight: bold; transition: 0.2s; padding: 10px 20px; font-size: 0.9rem; }
         .nav-btn:hover { background: #4f46e5; transform: translateY(-1px); }
         .nav-btn.active { background: white !important; color: #6366f1 !important; border: 2px solid #6366f1 !important; }
-        input, textarea { border: 1.5px solid #e5e7eb !important; border-radius: 10px !important; padding: 12px !important; }
+        input, textarea { border: 1.5px solid #e5e7eb !important; border-radius: 10px !important; padding: 12px !important; width: 100%; }
+        .output-box { background: #f5f3ff; border: 2px solid #ddd6fe; border-radius: 15px; padding: 20px; margin-top: 20px; white-space: pre-wrap; color: #1e1b4b; line-height: 1.6; }
     </style>
 </head>
-<body class="p-4 md:p-10">
+<body class="p-4 md:p-10 font-sans">
 
     <div class="max-w-6xl mx-auto">
-        <div class="bg-white rounded-2xl p-8 mb-8 shadow-lg">
-            <h1 class="text-4xl font-extrabold text-[#6366f1] mb-2 flex items-center gap-3">
+        <div class="bg-white rounded-2xl p-6 mb-8 shadow-lg">
+            <h1 class="text-3xl font-extrabold text-[#6366f1] flex items-center gap-3">
                 🚀 Real Estate Agent Command Center V2 Pro
             </h1>
             <p class="text-gray-500 font-medium">2026-2030 Edition | AI-Powered Hub</p>
         </div>
 
-        <div class="flex flex-wrap gap-3 mb-8">
+        <div class="flex flex-wrap gap-2 mb-8">
             <button onclick="showTab('social')" class="nav-btn active" id="btn-social">📱 Social Media Generator</button>
-            <button onclick="showTab('objection')" class="nav-btn" id="btn-objection">🛡️ Objection Bot</button>
-            <button onclick="showTab('warroom')" class="nav-btn">⚡ War-Room Prompts (25+)</button>
-            <button onclick="showTab('leads')" class="nav-btn">📊 Lead Tracker</button>
-            <button onclick="showTab('settings')" class="nav-btn bg-black text-white border-none" id="btn-settings"><i class="fas fa-cog"></i> Settings</button>
+            <button onclick="showTab('objection')" class="nav-btn">🛡️ Objection Bot</button>
+            <button onclick="showTab('connection')" class="nav-btn">📞 Connection Gen</button>
+            <button onclick="showTab('settings')" class="nav-btn bg-black text-white border-none"><i class="fas fa-cog"></i> Settings</button>
         </div>
 
-        <div class="glass-card p-10">
+        <div class="glass-card p-6 md:p-10">
             
             <div id="social-tab" class="tab-content">
-                <h2 class="text-3xl font-bold text-[#6366f1] mb-6">📱 AI Social Media Generator</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-4">
-                        <input id="addr" type="text" placeholder="Property Address" class="w-full">
-                        <input id="price" type="text" placeholder="Price" class="w-full">
-                        <div class="grid grid-cols-2 gap-4">
-                            <input id="beds" type="text" placeholder="Beds" class="w-full">
-                            <input id="baths" type="text" placeholder="Baths" class="w-full">
-                        </div>
-                    </div>
-                    <div class="space-y-4">
-                        <textarea id="features" rows="5" placeholder="Key Features (Pool, View, etc.)" class="w-full"></textarea>
-                    </div>
+                <h2 class="text-2xl font-bold text-[#6366f1] mb-6">📱 AI Social Media Generator</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input id="addr" type="text" placeholder="Property Address">
+                    <input id="price" type="text" placeholder="Price">
+                    <input id="beds" type="text" placeholder="Beds (e.g. 3)">
+                    <input id="baths" type="text" placeholder="Baths (e.g. 2)">
+                    <textarea id="features" rows="4" class="md:col-span-2" placeholder="Key Features (Pool, View, New Kitchen...)"></textarea>
                 </div>
-                <div class="mt-8 flex gap-4">
-                    <button onclick="runGemini()" id="mainBtn" class="bg-[#6366f1] text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-indigo-700 shadow-lg">Generate 7 Posts Now</button>
-                </div>
-                <div id="output" class="mt-10"></div>
+                <button onclick="generateSocial()" id="socialBtn" class="mt-6 bg-[#6366f1] text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-indigo-700 w-full md:w-auto shadow-lg transition">Generate 7 Posts Now</button>
+                <div id="socialOutput"></div>
+            </div>
+
+            <div id="objection-tab" class="tab-content hidden">
+                <h2 class="text-2xl font-bold text-[#6366f1] mb-6">🛡️ Real Estate Objection Bot</h2>
+                <textarea id="objectionInput" rows="3" placeholder="Paste what the client said (e.g. 'Your commission is too high' or 'I want to wait for the market to drop')"></textarea>
+                <button onclick="generateObjection()" id="objBtn" class="mt-4 bg-orange-500 text-white px-8 py-4 rounded-xl font-bold w-full md:w-auto shadow-lg">Get Winning Rebuttal</button>
+                <div id="objOutput"></div>
+            </div>
+
+            <div id="connection-tab" class="tab-content hidden">
+                <h2 class="text-2xl font-bold text-[#6366f1] mb-6">📞 Daily Connection Generator</h2>
+                <p class="mb-4 text-gray-600">Who are you calling today? Enter the person's name or type of lead.</p>
+                <input id="connectInput" type="text" placeholder="e.g. Past client, Expired listing, or 'John Smith'">
+                <button onclick="generateConnection()" id="connectBtn" class="mt-4 bg-green-600 text-white px-8 py-4 rounded-xl font-bold w-full md:w-auto shadow-lg">Generate Script</button>
+                <div id="connectOutput"></div>
             </div>
 
             <div id="settings-tab" class="tab-content hidden">
                 <h2 class="text-2xl font-bold mb-4">API Settings</h2>
-                <input type="password" id="apiKeyInput" class="w-full mb-4 max-w-md block" placeholder="Paste Gemini Key Here">
-                <button onclick="saveKey()" class="bg-green-600 text-white px-6 py-2 rounded-lg font-bold">Save Key</button>
-            </div>
-
-            <div id="objection-tab" class="tab-content hidden">
-                <h2 class="text-2xl font-bold mb-4">🛡️ Objection Bot</h2>
-                <textarea id="objectionInput" rows="3" placeholder="Paste the client's objection here (e.g., 'The commission is too high')" class="w-full mb-4"></textarea>
-                <button onclick="runObjection()" id="objBtn" class="bg-orange-500 text-white px-10 py-4 rounded-xl font-bold">Get Rebuttal</button>
-                <div id="objOutput" class="mt-10"></div>
+                <p class="text-sm text-gray-500 mb-4 font-medium">Paste your Gemini API key from Google AI Studio here.</p>
+                <input type="password" id="apiKeyInput" class="max-w-md block mb-4" placeholder="AIza...">
+                <button onclick="saveKey()" class="bg-black text-white px-6 py-2 rounded-lg font-bold">Save Key to Browser</button>
             </div>
 
         </div>
@@ -77,65 +78,49 @@
             document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId + '-tab').classList.remove('hidden');
-            // Find the button that was clicked to give it the white style
             if(event) event.currentTarget.classList.add('active');
         }
 
         function saveKey() {
             const key = document.getElementById('apiKeyInput').value.trim();
-            localStorage.setItem('my_gemini_key', key);
-            alert('✅ Key Saved!');
+            localStorage.setItem('gemini_v2_key', key);
+            alert('✅ Key Saved! Ready to go.');
         }
 
-        async function callGemini(promptText, outputId, buttonId) {
-            const key = localStorage.getItem('my_gemini_key');
+        async function askGemini(prompt, outputId, btnId) {
+            const key = localStorage.getItem('gemini_v2_key');
             const out = document.getElementById(outputId);
-            const btn = document.getElementById(buttonId);
+            const btn = document.getElementById(btnId);
 
-            if(!key) { alert('Save your key in Settings first!'); return; }
+            if(!key) { alert('Go to Settings and save your API key first!'); showTab('settings'); return; }
 
             btn.disabled = true;
-            out.innerHTML = "✨ AI is thinking...";
+            btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> AI is thinking...";
+            out.innerHTML = "";
 
             try {
-                // CHANGED: Using v1 stable and gemini-pro which is highly compatible
-                const url = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${key}`;
+                // CHANGED: Using v1 stable endpoint
+                const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${key}`;
                 
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: promptText }] }]
-                    })
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
                 });
 
                 const data = await response.json();
                 if (data.error) throw new Error(data.error.message);
 
-                const resultText = data.candidates[0].content.parts[0].text;
-                out.innerHTML = `<div class="bg-indigo-50 p-6 rounded-xl border-2 border-indigo-200 whitespace-pre-wrap">${resultText}</div>`;
+                const text = data.candidates[0].content.parts[0].text;
+                out.innerHTML = `<div class="output-box">${text.replace(/\*\*/g, '')}</div>`;
             } catch (err) {
-                out.innerHTML = `<div class="p-4 bg-red-100 text-red-700 rounded-lg">❌ Error: ${err.message}</div>`;
+                out.innerHTML = `<div class="mt-6 p-4 bg-red-100 text-red-700 rounded-lg">❌ <strong>Error:</strong> ${err.message}</div>`;
             } finally {
                 btn.disabled = false;
-                btn.innerText = buttonId === 'mainBtn' ? "Generate 7 Posts Now" : "Get Rebuttal";
+                btn.innerHTML = btnId === 'socialBtn' ? "Generate 7 Posts Now" : 
+                                btnId === 'objBtn' ? "Get Winning Rebuttal" : "Generate Script";
             }
         }
 
-        function runGemini() {
-            const prompt = `Act as a Real Estate Marketing Expert. Create 7 social media posts for: ${document.getElementById('addr').value}. Price: ${document.getElementById('price').value}. Features: ${document.getElementById('features').value}`;
-            callGemini(prompt, 'output', 'mainBtn');
-        }
-
-        function runObjection() {
-            const prompt = `Act as a luxury real estate coach. Provide 3 professional rebuttals for this client objection: ${document.getElementById('objectionInput').value}`;
-            callGemini(prompt, 'objOutput', 'objBtn');
-        }
-
-        window.onload = () => {
-            const saved = localStorage.getItem('my_gemini_key');
-            if(saved) document.getElementById('apiKeyInput').value = saved;
-        };
-    </script>
-</body>
-</html>
+        function generateSocial() {
+            const prompt = `Act as a top Real Estate Social Media Manager. Create 7 engaging posts (Monday-Sunday) for
