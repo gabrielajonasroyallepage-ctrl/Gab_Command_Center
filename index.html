@@ -7,48 +7,93 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { background-color: #7c73e6; }
-        .glass-card { background: white; border-radius: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .nav-btn { background: #6366f1; color: white; border: 1px solid white; border-radius: 8px; font-weight: bold; transition: all 0.2s; }
+        body { background-color: #7c73e6; } /* Your specific purple background */
+        .glass-card { background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        .nav-btn { background: #6366f1; color: white; border: 1px solid rgba(255,255,255,0.4); border-radius: 10px; font-weight: bold; transition: 0.2s; padding: 10px 20px; }
+        .nav-btn:hover { background: #4f46e5; transform: translateY(-1px); }
         .nav-btn.active { background: white; color: #6366f1; border: 2px solid #6366f1; }
+        input, textarea { border: 1.5px solid #e5e7eb !important; border-radius: 10px !important; padding: 12px !important; }
+        input:focus, textarea:focus { border-color: #6366f1 !important; outline: none; ring: 2px #c7d2fe; }
     </style>
 </head>
-<body class="p-4 md:p-8 font-sans">
+<body class="p-4 md:p-10">
 
     <div class="max-w-6xl mx-auto">
-        <div class="bg-white rounded-2xl p-6 mb-6 shadow-lg">
-            <h1 class="text-3xl font-bold text-indigo-600">🚀 Real Estate Command Center V2 Pro</h1>
-            <p class="text-gray-500">2026-2030 Edition | AI-Powered</p>
+        <div class="bg-white rounded-2xl p-8 mb-8 shadow-lg">
+            <h1 class="text-4xl font-extrabold text-[#6366f1] mb-2 flex items-center gap-3">
+                🚀 Real Estate Agent Command Center V2 Pro
+            </h1>
+            <p class="text-gray-500 font-medium">2026-2030 Edition | AI-Powered Lead Generation & Objection Handling</p>
         </div>
 
-        <div class="flex flex-wrap gap-3 mb-6">
-            <button onclick="showTab('social')" class="nav-btn active px-6 py-2">📱 Social Media Generator</button>
-            <button onclick="showTab('settings')" class="nav-btn bg-black border-none px-6 py-2">⚙️ Settings</button>
+        <div class="flex flex-wrap gap-3 mb-8">
+            <button onclick="showTab('social')" class="nav-btn active">📱 Social Media Generator</button>
+            <button onclick="showTab('objection')" class="nav-btn">🛡️ Objection Bot</button>
+            <button onclick="showTab('warroom')" class="nav-btn">⚡ War-Room Prompts (25+)</button>
+            <button onclick="showTab('connection')" class="nav-btn">📞 Daily Connection Generator</button>
+            <button onclick="showTab('leads')" class="nav-btn">📊 Lead Tracker</button>
+            <button onclick="showTab('routine')" class="nav-btn">✅ Daily Routine</button>
+            <button onclick="showTab('settings')" class="nav-btn bg-black text-white border-none"><i class="fas fa-cog"></i> Settings</button>
         </div>
 
-        <div class="glass-card p-8">
+        <div class="glass-card p-10">
+            
             <div id="social-tab" class="tab-content">
-                <h2 class="text-2xl font-bold text-indigo-700 mb-6">📱 AI Social Media Generator</h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    <input id="addr" type="text" placeholder="Property Address" class="p-3 border rounded-lg">
-                    <input id="price" type="text" placeholder="Price" class="p-3 border rounded-lg">
-                    <input id="beds" type="text" placeholder="Beds" class="p-3 border rounded-lg">
-                    <input id="baths" type="text" placeholder="Baths" class="p-3 border rounded-lg">
-                    <textarea id="features" placeholder="Key Features" class="p-3 border rounded-lg md:col-span-2"></textarea>
+                <h2 class="text-3xl font-bold text-[#6366f1] mb-2 flex items-center gap-2">📱 AI Social Media Generator</h2>
+                <hr class="border-indigo-100 mb-6">
+                <p class="text-gray-500 mb-8">Generate 7 different social media posts in seconds. Just enter your property details and watch the magic happen.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <label class="block font-bold text-gray-700">Property Address</label>
+                        <input id="addr" type="text" placeholder="e.g., 123 Main St, Downtown" class="w-full">
+                        
+                        <label class="block font-bold text-gray-700">Price</label>
+                        <input id="price" type="text" placeholder="e.g., $450,000" class="w-full">
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block font-bold text-gray-700">Bedrooms</label>
+                                <input id="beds" type="number" placeholder="3" class="w-full">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-gray-700">Bathrooms</label>
+                                <input id="baths" type="number" placeholder="2" class="w-full">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <label class="block font-bold text-gray-700">Key Features (comma-separated)</label>
+                        <textarea id="features" rows="5" placeholder="e.g., Updated kitchen, Large backyard..." class="w-full"></textarea>
+                        
+                        <label class="block font-bold text-gray-700">Neighborhood</label>
+                        <input id="hood" type="text" placeholder="e.g., Downtown District" class="w-full">
+                    </div>
                 </div>
 
-                <button onclick="runGemini()" id="mainBtn" class="bg-indigo-600 text-white px-8 py-3 rounded-lg font-bold shadow-md">Generate 7 Posts Now</button>
-                
-                <div id="output" class="mt-8"></div>
+                <div class="mt-10 flex gap-4">
+                    <button onclick="runGemini()" id="mainBtn" class="bg-[#6366f1] text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-indigo-700 shadow-lg">Generate 7 Posts Now</button>
+                    <button onclick="location.reload()" class="bg-gray-200 text-gray-700 px-10 py-4 rounded-xl font-bold">Clear</button>
+                </div>
+
+                <div id="output" class="mt-10"></div>
             </div>
 
             <div id="settings-tab" class="tab-content hidden">
-                <h2 class="text-2xl font-bold mb-4">API Settings</h2>
-                <input type="password" id="apiKeyInput" class="w-full p-3 border rounded mb-4" placeholder="Paste Gemini Key Here">
-                <button onclick="saveKey()" class="bg-green-600 text-white px-6 py-2 rounded font-bold">Save Key</button>
-                <p class="mt-4 text-sm text-gray-500">Make sure the key starts with "AIza..."</p>
+                <h2 class="text-2xl font-bold mb-4 text-indigo-800">API Settings</h2>
+                <div class="max-w-md p-6 bg-gray-50 rounded-xl border border-gray-200">
+                    <label class="block font-bold mb-2">Gemini API Key</label>
+                    <input type="password" id="apiKeyInput" class="w-full mb-4" placeholder="Paste key starting with AIza...">
+                    <button onclick="saveKey()" class="bg-green-600 text-white px-6 py-2 rounded-lg font-bold">Save Key</button>
+                </div>
             </div>
+
+            <div id="placeholder-tab" class="tab-content hidden py-20 text-center">
+                <i class="fas fa-hammer text-5xl text-gray-300 mb-4"></i>
+                <h3 class="text-2xl font-bold text-gray-400">Coming Soon</h3>
+                <p class="text-gray-400">We will build the logic for this tool next!</p>
+            </div>
+
         </div>
     </div>
 
@@ -56,14 +101,16 @@
         function showTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId + '-tab').classList.remove('hidden');
-            event.currentTarget.classList.add('active');
+            
+            const target = (tabId === 'social' || tabId === 'settings') ? tabId + '-tab' : 'placeholder-tab';
+            document.getElementById(target).classList.remove('hidden');
+            if (event) event.currentTarget.classList.add('active');
         }
 
         function saveKey() {
             const key = document.getElementById('apiKeyInput').value.trim();
             localStorage.setItem('my_gemini_key', key);
-            alert('✅ Key Saved! Try generating now.');
+            alert('✅ Key Saved! If you still get an error, check if the key is exactly correct.');
         }
 
         async function runGemini() {
@@ -71,47 +118,30 @@
             const out = document.getElementById('output');
             const btn = document.getElementById('mainBtn');
 
-            if(!key) {
-                out.innerHTML = `<div class="p-4 bg-yellow-100 text-yellow-800 rounded">⚠️ Please go to Settings and save your API key first!</div>`;
-                return;
-            }
+            if(!key) { alert('Please save your key in Settings!'); showTab('settings'); return; }
 
             btn.innerText = "⏳ AI is Writing...";
             btn.disabled = true;
-            out.innerHTML = "Connecting to Google...";
+            out.innerHTML = "Working...";
 
-            const promptText = "Create 7 real estate social media posts for: " + document.getElementById('addr').value;
+            const prompt = `Act as a top Real Estate Marketing Expert. Create 7 social media posts for: 
+            Address: ${document.getElementById('addr').value}, Price: ${document.getElementById('price').value}, 
+            Features: ${document.getElementById('features').value}. Include emojis.`;
 
             try {
-                // Testing the absolute simplest endpoint
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
-                
-                const response = await fetch(url, {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: promptText }] }]
-                    })
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
                 });
 
                 const data = await response.json();
-
-                if (data.error) {
-                    // This will tell us EXACTLY what is wrong (e.g. "API_KEY_INVALID")
-                    throw new Error(data.error.message || data.error.status);
-                }
+                if (data.error) throw new Error(data.error.message);
 
                 const resultText = data.candidates[0].content.parts[0].text;
-                out.innerHTML = `<div class="bg-indigo-50 p-6 rounded-xl border-2 border-indigo-200 whitespace-pre-wrap">${resultText}</div>`;
-
+                out.innerHTML = `<div class="bg-indigo-50 p-8 rounded-2xl border-2 border-indigo-200 whitespace-pre-wrap text-gray-800 font-medium">${resultText}</div>`;
             } catch (err) {
-                // Detailed error display
-                out.innerHTML = `
-                    <div class="p-4 bg-red-100 text-red-700 rounded-lg">
-                        <strong>❌ Connection Error:</strong><br>
-                        ${err.message}<br><br>
-                        <em>Tip: Ensure you copied the FULL key and your internet is connected.</em>
-                    </div>`;
+                out.innerHTML = `<div class="p-6 bg-red-100 text-red-700 rounded-xl font-bold">❌ Error: ${err.message}</div>`;
             } finally {
                 btn.innerText = "Generate 7 Posts Now";
                 btn.disabled = false;
