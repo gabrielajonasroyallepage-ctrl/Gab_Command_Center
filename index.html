@@ -3,101 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real Estate Command Center V2 Pro</title>
+    <title>Real Estate Agent Command Center V2 Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { background-color: #7c73e6; } 
-        .glass-card { background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        .nav-btn { background: #6366f1; color: white; border: 1px solid rgba(255,255,255,0.4); border-radius: 10px; font-weight: bold; transition: 0.2s; padding: 12px 20px; }
+        body { background-color: #7c73e6; font-family: sans-serif; }
+        .glass-card { background: white; border-radius: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .nav-btn { background: #6366f1; color: white; border: 1px solid white; border-radius: 8px; font-weight: bold; transition: all 0.2s; padding: 10px 20px; }
+        .nav-btn:hover { background: #4f46e5; }
         .nav-btn.active { background: white !important; color: #6366f1 !important; border: 2px solid #6366f1 !important; }
-        input, textarea { border: 1.5px solid #e5e7eb !important; border-radius: 10px !important; padding: 12px !important; width: 100%; }
-        .output-box { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 15px; padding: 25px; margin-top: 20px; white-space: pre-wrap; color: #1f2937; line-height: 1.7; position: relative; }
+        input, textarea { border: 1px solid #ddd !important; border-radius: 8px !important; padding: 12px !important; width: 100%; margin-bottom: 10px; }
     </style>
 </head>
-<body class="p-4 md:p-10 font-sans">
+<body class="p-4 md:p-8">
 
     <div class="max-w-6xl mx-auto">
-        <div class="bg-white rounded-2xl p-6 mb-8 shadow-lg">
-            <h1 class="text-3xl font-extrabold text-[#6366f1]">🚀 Real Estate Command Center V2 Pro</h1>
-            <p class="text-gray-500">Official AI Workspace - STABLE V1</p>
+        <div class="bg-white rounded-2xl p-6 mb-6 shadow-lg">
+            <h1 class="text-3xl font-bold text-indigo-600">🚀 Real Estate Agent Command Center V2 Pro</h1>
+            <p class="text-gray-500 mt-1 font-medium text-sm">2026-2030 Edition | AI-Powered Lead Generation & Objection Handling</p>
         </div>
 
-        <div class="flex flex-wrap gap-2 mb-8">
-            <button onclick="changeTab('social')" class="nav-btn active" id="tab-social-btn">📱 Social Media</button>
-            <button onclick="changeTab('objection')" class="nav-btn">🛡️ Objection Bot</button>
-            <button onclick="changeTab('settings')" class="nav-btn bg-slate-900 text-white border-none">⚙️ Settings</button>
+        <div class="flex flex-wrap gap-2 mb-6">
+            <button onclick="openTab('social')" class="nav-btn active" id="tab-social">📱 Social Media Generator</button>
+            <button onclick="openTab('objection')" class="nav-btn" id="tab-objection">🛡️ Objection Bot</button>
+            <button onclick="openTab('warroom')" class="nav-btn">⚡ War-Room Prompts (25+)</button>
+            <button onclick="openTab('connection')" class="nav-btn">📞 Daily Connection Generator</button>
+            <button onclick="openTab('leads')" class="nav-btn">📊 Lead Tracker</button>
+            <button onclick="openTab('routine')" class="nav-btn">✅ Daily Routine</button>
+            <button onclick="openTab('settings')" class="nav-btn bg-black border-none"><i class="fas fa-cog"></i> Settings</button>
         </div>
 
-        <div class="glass-card p-6 md:p-10">
+        <div class="glass-card p-8 min-h-[500px]">
             
-            <div id="social-tab" class="tab-panel">
-                <h2 class="text-2xl font-bold text-[#6366f1] mb-6">📱 Social Media Generator</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <input id="prop-addr" type="text" placeholder="Property Address">
-                    <input id="prop-price" type="text" placeholder="Price">
-                    <textarea id="prop-features" rows="4" class="md:col-span-2" placeholder="Key Features..."></textarea>
+            <div id="social-content" class="tab-panel">
+                <h2 class="text-2xl font-bold text-indigo-700 mb-4">📱 AI Social Media Generator</h2>
+                <p class="text-gray-600 mb-6 text-sm">Generate 7 different social media posts in seconds. Just enter property details.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input id="in-addr" type="text" placeholder="Property Address">
+                    <input id="in-price" type="text" placeholder="Price">
+                    <input id="in-beds" type="text" placeholder="Bedrooms">
+                    <input id="in-baths" type="text" placeholder="Bathrooms">
+                    <textarea id="in-features" rows="3" class="md:col-span-2" placeholder="Key Features (comma-separated)"></textarea>
+                    <input id="in-hood" type="text" class="md:col-span-2" placeholder="Neighborhood">
                 </div>
-                <button onclick="triggerGemini('social')" id="social-go" class="mt-6 bg-[#6366f1] text-white px-10 py-4 rounded-xl font-bold w-full shadow-lg">Generate 7 Posts Now</button>
-                <div id="social-result"></div>
+
+                <div class="flex gap-2 mt-4">
+                    <button onclick="callAI('social')" id="btn-social" class="bg-indigo-600 text-white px-8 py-3 rounded-lg font-bold">Generate 7 Posts Now</button>
+                    <button onclick="location.reload()" class="bg-gray-200 px-8 py-3 rounded-lg font-bold">Clear</button>
+                </div>
+                <div id="out-social" class="mt-6"></div>
             </div>
 
-            <div id="objection-tab" class="tab-panel hidden">
-                <h2 class="text-2xl font-bold text-orange-600 mb-6">🛡️ Objection Bot</h2>
-                <textarea id="obj-text" rows="3" placeholder="What did the client say?"></textarea>
-                <button onclick="triggerGemini('objection')" id="obj-go" class="mt-4 bg-orange-500 text-white px-10 py-4 rounded-xl font-bold w-full shadow-lg">Get Rebuttal</button>
-                <div id="obj-result"></div>
+            <div id="settings-content" class="tab-panel hidden">
+                <h2 class="text-2xl font-bold mb-4">API Settings</h2>
+                <div class="max-w-md">
+                    <label class="block font-bold mb-2 text-sm text-gray-700">Google Gemini Key (Must start with AIza...)</label>
+                    <input type="password" id="api-key-input" placeholder="Paste your key here">
+                    <button onclick="saveKey()" class="bg-green-600 text-white px-6 py-2 rounded font-bold w-full">Clean & Save Key</button>
+                    <p class="mt-4 text-xs text-red-500 font-bold uppercase">Important: Copy the key using the 'Copy' icon in Google AI Studio.</p>
+                </div>
             </div>
 
-            <div id="settings-tab" class="tab-panel hidden">
-                <h2 class="text-2xl font-bold mb-4">Settings</h2>
-                <input type="password" id="api-key-box" class="max-w-md block mb-4" placeholder="Paste Gemini Key (AIza...)">
-                <button onclick="saveApiAuth()" class="bg-black text-white px-6 py-3 rounded-lg font-bold">Save Final Key</button>
+            <div id="other-content" class="tab-panel hidden py-20 text-center text-gray-400">
+                <i class="fas fa-tools text-5xl mb-4"></i>
+                <p>Logic for this feature will be added once connection is fixed.</p>
             </div>
 
         </div>
     </div>
 
     <script>
-        function changeTab(id) {
+        function openTab(id) {
             document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id + '-tab').classList.remove('hidden');
+            
+            const target = (id === 'social' || id === 'settings') ? id + '-content' : 'other-content';
+            document.getElementById(target).classList.remove('hidden');
             if(event) event.currentTarget.classList.add('active');
         }
 
-        function saveApiAuth() {
-            const val = document.getElementById('api-key-box').value.trim();
-            localStorage.setItem('GEMINI_STABLE_KEY', val);
-            alert('✅ Key Saved! Browser updated.');
+        function saveKey() {
+            // Automatically trims spaces to prevent "Invalid Key" errors
+            const rawKey = document.getElementById('api-key-input').value.trim();
+            if(!rawKey.startsWith("AIza")) {
+                alert("❌ Error: That doesn't look like a Gemini Key. It should start with 'AIza'.");
+                return;
+            }
+            localStorage.setItem('RE_COMMAND_KEY', rawKey);
+            alert('✅ Key Cleaned & Saved! Refreshing page...');
+            location.reload();
         }
 
-        async function triggerGemini(mode) {
-            const key = localStorage.getItem('GEMINI_STABLE_KEY');
-            if(!key) { alert('Go to Settings first!'); return; }
+        async function callAI(mode) {
+            const key = localStorage.getItem('RE_COMMAND_KEY');
+            const out = document.getElementById('out-social');
+            const btn = document.getElementById('btn-social');
 
-            let prompt = "";
-            let targetDiv = "";
-            let targetBtn = "";
+            if(!key) { alert('Go to Settings and save your API key!'); openTab('settings'); return; }
 
-            if(mode === 'social') {
-                prompt = "Create 7 luxury real estate social posts for: " + document.getElementById('prop-addr').value;
-                targetDiv = "social-result"; targetBtn = "social-go";
-            } else {
-                prompt = "Provide a real estate rebuttal for: " + document.getElementById('obj-text').value;
-                targetDiv = "obj-result"; targetBtn = "obj-go";
-            }
-
-            const btn = document.getElementById(targetBtn);
-            const out = document.getElementById(targetDiv);
             btn.disabled = true;
-            out.innerHTML = "✨ Requesting from Gemini V1 Stable...";
+            btn.innerText = "⏳ AI is Working...";
+            out.innerHTML = "Connecting to Google...";
+
+            const prompt = `Create 7 social media posts for: ${document.getElementById('in-addr').value}. Price: ${document.getElementById('in-price').value}. Features: ${document.getElementById('in-features').value}.`;
 
             try {
-                // EXPLICIT STABLE URL
-                const endpoint = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${key}`;
+                // Using the most universal endpoint
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
                 
-                const response = await fetch(endpoint, {
+                const response = await fetch(url, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
@@ -106,20 +121,19 @@
                 const data = await response.json();
                 if(data.error) throw new Error(data.error.message);
 
-                const finalResponse = data.candidates[0].content.parts[0].text;
-                out.innerHTML = `<div class="output-box">${finalResponse.replace(/\*\*/g, '')}</div>`;
+                const text = data.candidates[0].content.parts[0].text;
+                out.innerHTML = `<div class="p-6 bg-indigo-50 border-2 border-indigo-100 rounded-xl whitespace-pre-wrap">${text.replace(/\*\*/g, '')}</div>`;
             } catch (err) {
-                out.innerHTML = `<div class="mt-6 p-4 bg-red-100 text-red-700 rounded-lg">❌ Connection Error: ${err.message}</div>`;
+                out.innerHTML = `<div class="p-4 bg-red-100 text-red-700 rounded-lg">❌ Connection Error: ${err.message}</div>`;
             } finally {
                 btn.disabled = false;
-                btn.innerText = "Done!";
-                setTimeout(() => { btn.innerText = mode === 'social' ? "Generate 7 Posts Now" : "Get Rebuttal"; }, 2000);
+                btn.innerText = "Generate 7 Posts Now";
             }
         }
 
         window.onload = () => {
-            const saved = localStorage.getItem('GEMINI_STABLE_KEY');
-            if(saved) document.getElementById('api-key-box').value = saved;
+            const saved = localStorage.getItem('RE_COMMAND_KEY');
+            if(saved) document.getElementById('api-key-input').value = saved;
         };
     </script>
 </body>
