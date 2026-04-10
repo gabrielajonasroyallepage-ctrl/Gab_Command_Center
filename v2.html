@@ -50,4 +50,73 @@
 
                 <div class="flex gap-2 mt-4">
                     <button onclick="runAI()" id="run-btn" class="bg-indigo-600 text-white px-10 py-3 rounded-xl font-bold shadow-lg">Generate 7 Posts Now</button>
-                    <button onclick="location.reload()" class="bg-gray-200 px-10 py-3
+                    <button onclick="location.reload()" class="bg-gray-200 px-10 py-3 rounded-xl font-bold">Clear</button>
+                </div>
+                <div id="out-area"></div>
+            </div>
+
+            <div id="settings-view" class="tab-panel hidden">
+                <h2 class="text-2xl font-bold mb-4">⚙️ API Settings</h2>
+                <div class="max-w-md">
+                    <input type="password" id="key-input" placeholder="Paste AIza... key">
+                    <button onclick="saveKey()" class="bg-green-600 text-white px-8 py-2 rounded-lg font-bold w-full">Save Key</button>
+                </div>
+            </div>
+
+            <div id="other-view" class="tab-panel hidden py-20 text-center text-gray-300">
+                <i class="fas fa-hammer text-5xl mb-4"></i>
+                <p>Social Media is connected first. We will unlock this tab next!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeTab(id) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            const target = (id === 'social' || id === 'settings') ? id + '-view' : 'other-view';
+            document.getElementById(target).classList.remove('hidden');
+            if(event) event.currentTarget.classList.add('active');
+        }
+
+        function saveKey() {
+            localStorage.setItem('STABLE_V1_KEY', document.getElementById('key-input').value.trim());
+            alert('✅ Key Saved! Browser updated to V3.0 Stable.');
+            location.reload();
+        }
+
+        async function runAI() {
+            const key = localStorage.getItem('STABLE_V1_KEY');
+            const out = document.getElementById('out-area');
+            if(!key) { alert('Enter key in Settings!'); return; }
+
+            out.innerHTML = "✨ Connecting to Stable API...";
+            const prompt = `Realtor Mode: Create 7 posts for ${document.getElementById('f-addr').value}. Price: ${document.getElementById('f-price').value}. Features: ${document.getElementById('f-feat').value}.`;
+
+            try {
+                // THE CRITICAL CHANGE: Forced v1 (not v1beta) and forced gemini-1.5-flash
+                const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${key}`;
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+
+                const data = await response.json();
+                if(data.error) throw new Error(data.error.message);
+
+                const text = data.candidates[0].content.parts[0].text;
+                out.innerHTML = `<div class="output-box">${text.replace(/\*\*/g, '')}</div>`;
+            } catch (err) {
+                out.innerHTML = `<div class="p-4 bg-red-100 text-red-700 mt-4 rounded-xl">❌ Error: ${err.message}</div>`;
+            }
+        }
+
+        window.onload = () => {
+            const saved = localStorage.getItem('STABLE_V1_KEY');
+            if(saved) document.getElementById('key-input').value = saved;
+        };
+    </script>
+</body>
+</html>
