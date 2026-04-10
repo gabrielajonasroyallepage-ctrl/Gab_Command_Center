@@ -3,94 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Command Center V2 - STABLE</title>
+    <title>Real Estate Command Center V2 Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { background-color: #7c73e6; font-family: sans-serif; }
-        .glass-card { background: white; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        .nav-btn { background: #6366f1; color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 12px; font-weight: bold; padding: 12px 20px; transition: 0.2s; }
-        .nav-btn.active { background: white !important; color: #6366f1 !important; border: 2px solid #6366f1 !important; }
-        input, textarea { border: 1.5px solid #e2e8f0 !important; border-radius: 12px !important; padding: 14px !important; width: 100%; margin-bottom: 10px; }
-        .output-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; margin-top: 20px; white-space: pre-wrap; color: #1e293b; line-height: 1.8; }
+        body { background-color: #7c73e6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .glass-card { background: white; border-radius: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+        .nav-btn { background: #6366f1; color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 12px; font-weight: bold; transition: 0.3s; padding: 12px 18px; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; }
+        .nav-btn:hover { background: #4f46e5; transform: translateY(-2px); }
+        .nav-btn.active { background: white !important; color: #6366f1 !important; border: 2px solid #6366f1 !important; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        input, textarea { border: 1.5px solid #e2e8f0 !important; border-radius: 12px !important; padding: 14px !important; width: 100%; margin-bottom: 12px; transition: 0.3s; }
+        input:focus { border-color: #6366f1 !important; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); outline: none; }
+        .output-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 25px; margin-top: 25px; white-space: pre-wrap; color: #1e293b; line-height: 1.8; }
     </style>
 </head>
 <body class="p-4 md:p-10">
 
     <div class="max-w-6xl mx-auto">
-        <div class="bg-white rounded-3xl p-8 mb-8 shadow-xl">
-            <h1 class="text-3xl font-extrabold text-indigo-600">🚀 Real Estate Command Center</h1>
-            <p class="text-gray-500 font-medium">STABLE VERSION 2026</p>
+        <div class="bg-white rounded-3xl p-8 mb-8 shadow-xl border-b-4 border-indigo-100">
+            <h1 class="text-3xl font-extrabold text-indigo-600 flex items-center gap-3">🚀 Real Estate Agent Command Center V2 Pro</h1>
+            <p class="text-gray-500 font-medium">2026-2030 Edition | AI-Powered Hub</p>
         </div>
 
-        <div class="flex flex-wrap gap-3 mb-8">
-            <button onclick="showTab('social')" class="nav-btn active" id="btn-social">📱 Social Media</button>
-            <button onclick="showTab('settings')" class="nav-btn bg-black border-none"><i class="fas fa-cog"></i> Settings</button>
+        <div class="flex flex-wrap gap-2 mb-8">
+            <button onclick="switchTab('social')" class="nav-btn active" id="btn-social"><i class="fas fa-mobile-alt"></i> Social Media Generator</button>
+            <button onclick="switchTab('objection')" class="nav-btn"><i class="fas fa-shield-alt"></i> Objection Bot</button>
+            <button onclick="switchTab('warroom')" class="nav-btn"><i class="fas fa-bolt"></i> War-Room Prompts</button>
+            <button onclick="switchTab('settings')" class="nav-btn bg-slate-800 border-none"><i class="fas fa-cog"></i> Settings</button>
         </div>
 
-        <div class="glass-card p-10 min-h-[500px]">
+        <div class="glass-card p-6 md:p-10 min-h-[550px]">
+            
             <div id="social-tab" class="tab-panel">
-                <input id="addr" type="text" placeholder="Property Address">
-                <input id="price" type="text" placeholder="Price">
-                <textarea id="features" rows="4" placeholder="Features..."></textarea>
-                <button onclick="generate()" id="gen-btn" class="bg-indigo-600 text-white px-10 py-4 rounded-xl font-bold w-full shadow-lg">Generate 7 Posts Now</button>
-                <div id="out"></div>
+                <h2 class="text-2xl font-bold text-indigo-700 mb-6">📱 AI Social Media Generator</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input id="addr" type="text" placeholder="Property Address (e.g. 123 Main St)">
+                    <input id="price" type="text" placeholder="Price (e.g. $550,000)">
+                    <textarea id="features" rows="4" class="md:col-span-2" placeholder="Key Features (Pool, Chef's Kitchen, Quiet Street...)"></textarea>
+                </div>
+                <button onclick="startAI()" id="run-btn" class="mt-4 bg-indigo-600 text-white px-12 py-4 rounded-xl font-extrabold text-lg shadow-lg hover:bg-indigo-700 transition w-full md:w-auto">Generate 7 Posts Now</button>
+                <div id="display"></div>
             </div>
 
             <div id="settings-tab" class="tab-panel hidden">
-                <h2 class="text-xl font-bold mb-4">API Settings</h2>
-                <input type="password" id="key-input" placeholder="Paste AIza... key here">
-                <button onclick="save()" class="bg-green-600 text-white px-8 py-3 rounded-xl font-bold w-full">Save Key</button>
+                <h2 class="text-2xl font-bold mb-4 text-slate-800">API Configuration</h2>
+                <div class="max-w-md">
+                    <p class="text-sm text-gray-500 mb-4">Paste your Gemini API key from Google AI Studio.</p>
+                    <input type="password" id="key-input" placeholder="AIza...">
+                    <button onclick="saveKey()" class="bg-emerald-600 text-white px-8 py-3 rounded-xl font-bold w-full shadow-md">Save & Enable AI</button>
+                </div>
+            </div>
+
+            <div id="other-tab" class="tab-panel hidden py-20 text-center">
+                <i class="fas fa-magic text-6xl text-indigo-100 mb-4"></i>
+                <p class="text-gray-400 font-medium">We'll unlock this feature once the Social Media connection is green!</p>
             </div>
         </div>
     </div>
 
     <script>
-        function showTab(id) {
+        function switchTab(id) {
             document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
-            document.getElementById(id + '-tab').classList.remove('hidden');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            const target = (id === 'social' || id === 'settings') ? id + '-tab' : 'other-tab';
+            document.getElementById(target).classList.remove('hidden');
+            if(event) event.currentTarget.classList.add('active');
         }
 
-        function save() {
-            // New storage name to bypass the "Invalid Key" cache
-            localStorage.setItem('GEMINI_V2_FINAL_KEY', document.getElementById('key-input').value.trim());
-            alert('✅ Key Saved! Now try the Social Media tab.');
+        function saveKey() {
+            const k = document.getElementById('key-input').value.trim();
+            localStorage.setItem('GEMINI_ULTIMATE_KEY', k);
+            alert('✅ Key Saved! Settings Synchronized.');
             location.reload();
         }
 
-        async function generate() {
-            const key = localStorage.getItem('GEMINI_V2_FINAL_KEY');
-            const btn = document.getElementById('gen-btn');
-            const out = document.getElementById('out');
+        async function startAI() {
+            const key = localStorage.getItem('GEMINI_ULTIMATE_KEY');
+            const btn = document.getElementById('run-btn');
+            const out = document.getElementById('display');
 
-            if(!key) { alert('Go to Settings first!'); return; }
+            if(!key) { alert('Please go to Settings and enter your key!'); switchTab('settings'); return; }
 
             btn.disabled = true;
-            out.innerHTML = "✨ AI is thinking...";
+            btn.innerHTML = "<i class='fas fa-sync fa-spin'></i> AI is drafting...";
+            out.innerHTML = "";
 
-            try {
-                // FORCE: v1 address AND gemini-1.5-flash model name
-                const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${key}`;
-                
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ contents: [{ parts: [{ text: "Write 7 real estate posts for: " + document.getElementById('addr').value }] }] })
-                });
+            const promptText = "Create 7 engaging real estate social media posts for: " + document.getElementById('addr').value + ". Price: " + document.getElementById('price').value + ". Features: " + document.getElementById('features').value;
 
-                const data = await response.json();
-                if(data.error) throw new Error(data.error.message);
+            // TRY STRATEGY: Try v1beta first as it's the most compatible with 'flash'
+            const endpoints = [
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,
+                `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${key}`
+            ];
 
-                out.innerHTML = `<div class="output-box">${data.candidates[0].content.parts[0].text}</div>`;
-            } catch (err) {
-                out.innerHTML = `<div class="p-4 bg-red-100 text-red-700 mt-4 rounded-lg">❌ Connection Error: ${err.message}</div>`;
-            } finally {
-                btn.disabled = false;
+            let success = false;
+
+            for (let url of endpoints) {
+                if (success) break;
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
+                    });
+
+                    const data = await response.json();
+                    if (data.error) continue; // Try the next endpoint if this one fails
+
+                    const result = data.candidates[0].content.parts[0].text;
+                    out.innerHTML = `<div class="output-box">${result.replace(/\*\*/g, '')}</div>`;
+                    success = true;
+                } catch (e) {
+                    console.log("Endpoint failed, trying backup...");
+                }
             }
+
+            if (!success) {
+                out.innerHTML = `<div class="p-4 bg-red-100 text-red-700 mt-6 rounded-xl border border-red-200">❌ <strong>Final Connection Error:</strong> Still unable to reach the model. Please double check that your API key in Settings is copied exactly as shown in AI Studio.</div>`;
+            }
+            
+            btn.disabled = false;
+            btn.innerHTML = "Generate 7 Posts Now";
         }
 
         window.onload = () => {
-            const saved = localStorage.getItem('GEMINI_V2_FINAL_KEY');
+            const saved = localStorage.getItem('GEMINI_ULTIMATE_KEY');
             if(saved) document.getElementById('key-input').value = saved;
         };
     </script>
