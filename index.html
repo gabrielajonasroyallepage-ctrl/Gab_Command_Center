@@ -7,94 +7,112 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { background-color: #7c73e6; font-family: sans-serif; }
-        .glass-card { background: white; border-radius: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .nav-btn { background: #6366f1; color: white; border: 1px solid rgba(255,255,255,0.4); border-radius: 10px; font-weight: bold; transition: 0.2s; padding: 10px 20px; }
-        .nav-btn.active { background: white !important; color: #6366f1 !important; border: 2px solid #6366f1 !important; }
-        input, textarea { border: 1.5px solid #e5e7eb !important; border-radius: 10px !important; padding: 12px !important; width: 100%; margin-bottom: 10px; }
-        .output-box { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 15px; padding: 25px; margin-top: 20px; white-space: pre-wrap; color: #1f2937; line-height: 1.7; }
+        body { background-color: #7c73e6; font-family: 'Inter', sans-serif; }
+        .glass-card { background: white; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        .nav-btn { background: #6366f1; color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 12px; font-weight: 600; transition: 0.2s; padding: 12px 20px; font-size: 0.9rem; }
+        .nav-btn:hover { background: #4f46e5; transform: translateY(-2px); }
+        .nav-btn.active { background: white !important; color: #6366f1 !important; border: 2px solid #6366f1 !important; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        input, textarea { border: 1.5px solid #e2e8f0 !important; border-radius: 12px !important; padding: 14px !important; width: 100%; transition: all 0.3s; }
+        input:focus, textarea:focus { border-color: #6366f1 !important; outline: none; ring: 3px rgba(99, 102, 241, 0.2); }
+        .output-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; margin-top: 24px; white-space: pre-wrap; color: #1e293b; line-height: 1.8; }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="p-4 md:p-10">
 
     <div class="max-w-6xl mx-auto">
-        <div class="bg-white rounded-2xl p-6 mb-6 shadow-lg">
-            <h1 class="text-3xl font-bold text-indigo-600 flex items-center gap-3">🚀 Real Estate Agent Command Center V2 Pro</h1>
-            <p class="text-gray-500 mt-1 font-medium text-sm">2026-2030 Edition | AI-Powered Hub</p>
+        <div class="bg-white rounded-3xl p-8 mb-8 shadow-xl">
+            <h1 class="text-3xl font-extrabold text-indigo-600 flex items-center gap-3">
+                🚀 Real Estate Agent Command Center V2 Pro
+            </h1>
+            <p class="text-gray-500 font-medium mt-1">2026-2030 Edition | AI-Powered Hub</p>
         </div>
 
-        <div class="flex flex-wrap gap-2 mb-6">
-            <button onclick="showTab('social')" class="nav-btn active" id="tab-social">📱 Social Media Generator</button>
-            <button onclick="showTab('objection')" class="nav-btn">🛡️ Objection Bot</button>
-            <button onclick="showTab('warroom')" class="nav-btn">⚡ War-Room Prompts (25+)</button>
-            <button onclick="showTab('connection')" class="nav-btn">📞 Daily Connection Generator</button>
-            <button onclick="showTab('leads')" class="nav-btn">📊 Lead Tracker</button>
-            <button onclick="showTab('routine')" class="nav-btn">✅ Daily Routine</button>
-            <button onclick="showTab('settings')" class="nav-btn bg-black border-none"><i class="fas fa-cog"></i> Settings</button>
+        <div class="flex flex-wrap gap-3 mb-8">
+            <button onclick="switchTab('social')" class="nav-btn active" id="tab-social">📱 Social Media Generator</button>
+            <button onclick="switchTab('objection')" class="nav-btn">🛡️ Objection Bot</button>
+            <button onclick="switchTab('warroom')" class="nav-btn">⚡ War-Room Prompts (25+)</button>
+            <button onclick="switchTab('connection')" class="nav-btn">📞 Connection Generator</button>
+            <button onclick="switchTab('leads')" class="nav-btn">📊 Lead Tracker</button>
+            <button onclick="switchTab('settings')" class="nav-btn bg-slate-900 border-none"><i class="fas fa-cog"></i> Settings</button>
         </div>
 
-        <div class="glass-card p-8 min-h-[500px]">
+        <div class="glass-card p-10 min-h-[600px]">
             
-            <div id="social-panel" class="tab-panel">
-                <h2 class="text-2xl font-bold text-indigo-700 mb-4">📱 AI Social Media Generator</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input id="f-addr" type="text" placeholder="Property Address">
-                    <input id="f-price" type="text" placeholder="Price">
-                    <input id="f-beds" type="text" placeholder="Bedrooms">
-                    <input id="f-baths" type="text" placeholder="Bathrooms">
-                    <textarea id="f-features" rows="3" class="md:col-span-2" placeholder="Key Features (comma-separated)"></textarea>
+            <div id="social-view" class="tab-content">
+                <h2 class="text-2xl font-bold text-indigo-700 mb-6">📱 AI Social Media Generator</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-600 mb-2">Property Address</label>
+                        <input id="p-addr" type="text" placeholder="e.g., 123 Main St">
+                        <label class="block text-sm font-bold text-gray-600 mb-2 mt-4">Price</label>
+                        <input id="p-price" type="text" placeholder="e.g., $500,000">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-600 mb-2">Key Features</label>
+                        <textarea id="p-features" rows="5" placeholder="New kitchen, pool, walking distance to park..."></textarea>
+                    </div>
                 </div>
-                <button onclick="runCommand('social')" id="btn-social" class="mt-4 bg-indigo-600 text-white px-10 py-4 rounded-xl font-bold shadow-lg">Generate 7 Posts Now</button>
-                <div id="out-social"></div>
+                <div class="flex gap-4 mt-8">
+                    <button onclick="triggerAI()" id="run-btn" class="bg-indigo-600 text-white px-10 py-4 rounded-xl font-bold shadow-lg hover:bg-indigo-700 transition w-full md:w-auto">Generate 7 Posts Now</button>
+                    <button onclick="location.reload()" class="bg-gray-100 text-gray-600 px-10 py-4 rounded-xl font-bold hover:bg-gray-200">Clear</button>
+                </div>
+                <div id="social-result"></div>
             </div>
 
-            <div id="settings-panel" class="tab-panel hidden">
-                <h2 class="text-2xl font-bold mb-4 text-indigo-800">API Settings</h2>
+            <div id="settings-view" class="tab-content hidden">
+                <h2 class="text-2xl font-bold text-indigo-700 mb-6">⚙️ Settings</h2>
                 <div class="max-w-md">
-                    <label class="block font-bold mb-2 text-sm text-gray-700">Paste Gemini Key here</label>
-                    <input type="password" id="key-field" placeholder="AIza...">
-                    <button onclick="saveKey()" class="bg-green-600 text-white px-6 py-2 rounded font-bold w-full">Save Key</button>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Google Gemini API Key</label>
+                    <input type="password" id="api-input" class="mb-4" placeholder="AIza...">
+                    <button onclick="saveAuth()" class="bg-emerald-600 text-white px-8 py-3 rounded-xl font-bold w-full shadow-md">Save & Synchronize</button>
+                    <p class="mt-4 text-xs text-gray-400">Make sure to copy the key directly from Google AI Studio.</p>
                 </div>
             </div>
 
-            <div id="other-panel" class="tab-panel hidden py-20 text-center text-gray-400">
-                <i class="fas fa-tools text-5xl mb-4"></i>
-                <p>Social Media logic is first! We will activate this button next.</p>
+            <div id="other-view" class="tab-content hidden py-24 text-center">
+                <i class="fas fa-hammer text-5xl text-gray-200 mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-300">Feature Under Construction</h3>
+                <p class="text-gray-400">We will activate this once the connection is verified!</p>
             </div>
+
         </div>
     </div>
 
     <script>
-        function showTab(id) {
-            document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            const target = (id === 'social' || id === 'settings') ? id + '-panel' : 'other-panel';
-            document.getElementById(target).classList.remove('hidden');
+            
+            const viewId = (tabId === 'social' || tabId === 'settings') ? tabId + '-view' : 'other-view';
+            document.getElementById(viewId).classList.remove('hidden');
             if(event) event.currentTarget.classList.add('active');
         }
 
-        function saveKey() {
-            localStorage.setItem('STABLE_API_KEY', document.getElementById('key-field').value.trim());
-            alert('✅ Key Saved! Page refreshing...');
+        function saveAuth() {
+            const k = document.getElementById('api-input').value.trim();
+            localStorage.setItem('GEMINI_MASTER_KEY', k);
+            alert('✅ Key Saved Successfully!');
             location.reload();
         }
 
-        async function runCommand() {
-            const key = localStorage.getItem('STABLE_API_KEY');
-            const out = document.getElementById('out-social');
-            const btn = document.getElementById('btn-social');
+        async function triggerAI() {
+            const key = localStorage.getItem('GEMINI_MASTER_KEY');
+            const btn = document.getElementById('run-btn');
+            const res = document.getElementById('social-result');
 
-            if(!key) { alert('Go to Settings first!'); showTab('settings'); return; }
+            if(!key) { alert('Go to Settings and save your API key!'); switchTab('settings'); return; }
 
             btn.disabled = true;
-            btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> AI Generating...";
-            out.innerHTML = "";
+            btn.innerHTML = "<i class='fas fa-spinner fa-spin mr-2'></i> AI is Writing...";
+            res.innerHTML = "Connecting...";
 
-            const prompt = `Act as a top Real Estate Marketer. Create 7 social media posts for: ${document.getElementById('f-addr').value}. Price: ${document.getElementById('f-price').value}. Features: ${document.getElementById('f-features').value}.`;
+            const prompt = `Act as a top Real Estate marketer. Create 7 engaging social media posts for: ${document.getElementById('p-addr').value}. Price: ${document.getElementById('p-price').value}. Features: ${document.getElementById('p-features').value}.`;
 
             try {
-                // THE CRITICAL FIX: Explicit v1 and gemini-1.5-flash
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${key}`, {
+                // Using the most current STABLE endpoint (v1)
+                const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${key}`;
+                
+                const response = await fetch(url, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
@@ -103,10 +121,10 @@
                 const data = await response.json();
                 if(data.error) throw new Error(data.error.message);
 
-                const text = data.candidates[0].content.parts[0].text;
-                out.innerHTML = `<div class="output-box">${text.replace(/\*\*/g, '')}</div>`;
+                const finalOutput = data.candidates[0].content.parts[0].text;
+                res.innerHTML = `<div class="output-box">${finalOutput.replace(/\*\*/g, '')}</div>`;
             } catch (err) {
-                out.innerHTML = `<div class="mt-6 p-4 bg-red-100 text-red-700 rounded-lg font-bold">❌ Connection Error: ${err.message}</div>`;
+                res.innerHTML = `<div class="mt-6 p-5 bg-red-100 text-red-700 rounded-xl font-bold border border-red-200">❌ Error: ${err.message}</div>`;
             } finally {
                 btn.disabled = false;
                 btn.innerText = "Generate 7 Posts Now";
@@ -114,8 +132,8 @@
         }
 
         window.onload = () => {
-            const saved = localStorage.getItem('STABLE_API_KEY');
-            if(saved) document.getElementById('key-field').value = saved;
+            const saved = localStorage.getItem('GEMINI_MASTER_KEY');
+            if(saved) document.getElementById('api-input').value = saved;
         };
     </script>
 </body>
