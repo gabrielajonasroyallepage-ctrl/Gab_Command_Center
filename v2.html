@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real Estate Hub V6.0 - Smart Detect</title>
+    <title>Real Estate Hub V8.0 - Auto-Solver</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -17,43 +17,49 @@
 </head>
 <body class="p-4 md:p-10">
     <div class="max-w-6xl mx-auto">
-        <div class="text-right text-white/40 text-xs mb-2 font-mono">ENGINE: SMART_DETECT_V6</div>
+        <div class="text-right text-white/40 text-[10px] mb-2 font-mono">CORE_ENGINE: AUTO_SOLVER_V8</div>
 
         <div class="bg-white rounded-3xl p-8 mb-6 shadow-xl">
             <h1 class="text-3xl font-extrabold text-indigo-600">🚀 Real Estate Agent Command Center V2 Pro</h1>
-            <p class="text-gray-500 font-medium italic">Powered by Multi-Route AI Detection</p>
+            <p class="text-gray-500 font-medium">2026-2030 Edition | AI-Powered Hub</p>
         </div>
 
         <div class="flex flex-wrap gap-2 mb-6">
             <button onclick="tab('social')" class="nav-btn active" id="b-social">📱 Social Media Generator</button>
             <button onclick="tab('objection')" class="nav-btn">🛡️ Objection Bot</button>
-            <button onclick="tab('warroom')" class="nav-btn">⚡ War-Room Prompts</button>
+            <button onclick="tab('warroom')" class="nav-btn">⚡ War-Room Prompts (25+)</button>
+            <button onclick="tab('leads')" class="nav-btn">📊 Lead Tracker</button>
+            <button onclick="tab('routine')" class="nav-btn">✅ Daily Routine</button>
             <button onclick="tab('settings')" class="nav-btn bg-black border-none">⚙️ Settings</button>
         </div>
 
-        <div class="glass-card p-10">
+        <div class="glass-card p-10 min-h-[500px]">
             <div id="social-tab" class="panel">
                 <h2 class="text-2xl font-bold text-indigo-700 mb-6">📱 AI Social Media Generator</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input id="addr" type="text" placeholder="Property Address">
-                    <input id="price" type="text" placeholder="Price">
+                    <input id="addr" type="text" placeholder="Property Address (e.g., 123 Main St)">
+                    <input id="price" type="text" placeholder="Price (e.g., $450,000)">
                     <input id="beds" type="text" placeholder="Bedrooms">
                     <input id="baths" type="text" placeholder="Bathrooms">
-                    <textarea id="feat" rows="4" class="md:col-span-2" placeholder="Key Features..."></textarea>
+                    <textarea id="feat" rows="3" class="md:col-span-2" placeholder="Key Features (e.g., Garage, Pool, New Kitchen)"></textarea>
                     <input id="hood" type="text" class="md:col-span-2" placeholder="Neighborhood">
                 </div>
-                <button onclick="smartRun()" id="run-btn" class="mt-4 bg-indigo-600 text-white px-12 py-4 rounded-xl font-bold w-full shadow-lg">Generate 7 Posts Now</button>
+                <div class="flex gap-2 mt-4">
+                    <button onclick="solveAndRun()" id="run-btn" class="bg-indigo-600 text-white px-12 py-4 rounded-xl font-bold flex-1 shadow-lg">Generate 7 Posts Now</button>
+                    <button onclick="location.reload()" class="bg-gray-100 px-8 py-4 rounded-xl font-bold">Clear</button>
+                </div>
                 <div id="display"></div>
             </div>
 
             <div id="settings-tab" class="panel hidden">
                 <h2 class="text-xl font-bold mb-4">API Settings</h2>
-                <input type="password" id="key-field" placeholder="Paste your AIza... key">
-                <button onclick="saveKey()" class="bg-green-600 text-white px-8 py-3 rounded-xl font-bold w-full">Save Key</button>
+                <input type="password" id="key-field" placeholder="Paste your AIza... key here">
+                <button onclick="saveKey()" class="bg-green-600 text-white px-8 py-3 rounded-xl font-bold w-full">Save and Verify Key</button>
             </div>
 
-            <div id="other-tab" class="panel hidden py-20 text-center text-gray-300 italic">
-                Social Media Logic must work before we unlock this tab!
+            <div id="other-tab" class="panel hidden py-20 text-center text-gray-400">
+                <i class="fas fa-lock text-5xl mb-4"></i>
+                <p>Social Media Generator must work before these tools unlock.</p>
             </div>
         </div>
     </div>
@@ -61,75 +67,70 @@
     <script>
         function tab(id) {
             document.querySelectorAll('.panel').forEach(p => p.classList.add('hidden'));
-            document.getElementById(id + '-tab').classList.remove('hidden');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            const target = (id === 'social' || id === 'settings') ? id + '-tab' : 'other-tab';
+            document.getElementById(target).classList.remove('hidden');
+            if(event) event.currentTarget.classList.add('active');
         }
 
         function saveKey() {
-            localStorage.setItem('RE_SMART_KEY', document.getElementById('key-field').value.trim());
-            alert('✅ Key Saved! Ready to run Smart-Detect.');
+            localStorage.setItem('AUTO_SOLVE_KEY', document.getElementById('key-field').value.trim());
+            alert('✅ Key Saved! Now try generating a post.');
             location.reload();
         }
 
-        async function smartRun() {
-            const key = localStorage.getItem('RE_SMART_KEY');
+        async function solveAndRun() {
+            const key = localStorage.getItem('AUTO_SOLVE_KEY');
             const out = document.getElementById('display');
-            const btn = document.getElementById('run-btn');
             if(!key) { alert('Go to Settings first!'); return; }
 
-            btn.disabled = true;
-            out.innerHTML = "🔍 Detecting your API permissions...";
+            out.innerHTML = "<div class='text-indigo-600 font-bold italic animate-pulse'>✨ Testing all possible connection routes for your key...</div>";
+            
+            const prompt = `Realtor Mode: Create 7 posts for ${document.getElementById('addr').value}. Price: ${document.getElementById('price').value}. Neighborhood: ${document.getElementById('hood').value}. Features: ${document.getElementById('feat').value}.`;
 
-            const prompt = `Realtor AI: Write 7 social media posts for ${document.getElementById('addr').value}. Price: ${document.getElementById('price').value}. Features: ${document.getElementById('feat').value}. Neighborhood: ${document.getElementById('hood').value}.`;
-
-            // THE COMBINATIONS: We try all of these in order
-            const routes = [
+            // THE COMBINATION LIST: This covers every possible reason for that error
+            const combinations = [
                 { v: 'v1beta', m: 'gemini-1.5-flash-latest' },
                 { v: 'v1', m: 'gemini-1.5-flash-latest' },
                 { v: 'v1beta', m: 'gemini-1.5-flash' },
                 { v: 'v1', m: 'gemini-1.5-flash' },
-                { v: 'v1beta', m: 'gemini-pro' }
+                { v: 'v1beta', m: 'gemini-1.5-pro' },
+                { v: 'v1', m: 'gemini-pro' }
             ];
 
-            let success = false;
+            let foundRoute = false;
 
-            for (let route of routes) {
-                if (success) break;
-                console.log(`Trying ${route.m} via ${route.v}...`);
-                
+            for (let route of combinations) {
+                if (foundRoute) break;
                 try {
                     const response = await fetch(`https://generativelanguage.googleapis.com/${route.v}/models/${route.m}:generateContent?key=${key}`, {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
                     });
-
                     const data = await response.json();
                     
-                    if (data.candidates && data.candidates[0].content.parts[0].text) {
-                        const text = data.candidates[0].content.parts[0].text;
-                        out.innerHTML = `<div class="output-box">${text.replace(/\*\*/g, '')}</div>`;
-                        success = true;
-                        console.log(`✅ Success with ${route.m} (${route.v})`);
+                    if (data.candidates && data.candidates[0].content) {
+                        const content = data.candidates[0].content.parts[0].text;
+                        out.innerHTML = `<div class="output-box">${content.replace(/\*\*/g, '')}</div>`;
+                        foundRoute = true;
+                        console.log(`Success route: ${route.v}/${route.m}`);
                     }
-                } catch (e) { 
-                    console.log(`❌ Failed ${route.m}`);
-                }
+                } catch (e) { continue; }
             }
 
-            if (!success) {
+            if (!foundRoute) {
                 out.innerHTML = `<div class="p-6 bg-red-100 text-red-700 mt-4 rounded-xl font-bold">
-                    ❌ FATAL: All 5 connection routes were rejected by Google.<br><br>
-                    Possible Reasons:<br>
-                    1. Your key was copied with a hidden space.<br>
-                    2. Your Google Cloud billing/account is suspended.<br>
-                    3. You are in a country where Gemini API is restricted.
+                    ❌ FAILED ALL ROUTES. <br><br>
+                    Your API Key was rejected by every version of Google Gemini. <br><br>
+                    1. Ensure your key is from 'Google AI Studio', not 'Google Cloud'.<br>
+                    2. Check if your account has been restricted by Google.
                 </div>`;
             }
-            btn.disabled = false;
         }
 
         window.onload = () => {
-            const saved = localStorage.getItem('RE_SMART_KEY');
+            const saved = localStorage.getItem('AUTO_SOLVE_KEY');
             if(saved) document.getElementById('key-field').value = saved;
         };
     </script>
